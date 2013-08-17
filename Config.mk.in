@@ -24,13 +24,14 @@ BINDIR		:= @bindir@
 
 WARNOPTS	:= -Wall -Wextra -Wpointer-arith -Wredundant-decls \
 		-Wshadow -Wcast-qual @SYSWARNS@
-CXXFLAGS	:= ${WARNOPTS} @CUSTOMINCDIR@ -fno-threadsafe-statics -ffunction-sections -fdata-sections
+CFLAGS		:= ${WARNOPTS} @CUSTOMINCDIR@ -march=native -std=gnu99 \
+		-ffunction-sections -fdata-sections
 LDFLAGS		:= @CUSTOMLIBDIR@
-LIBS		:=
+LIBS		:= -lpam
 ifdef DEBUG
-    CXXFLAGS	+= -O0 -g
+    CFLAGS	+= -O0 -g
 else
-    CXXFLAGS	+= -Os -g0 -DNDEBUG=1
+    CFLAGS	+= -Os -g0 -DNDEBUG=1
     LDFLAGS	+= -s -Wl,-O1,-gc-sections
 endif
 O		:= .o/

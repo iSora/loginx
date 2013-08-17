@@ -22,11 +22,11 @@ ${EXE}:	${OBJS}
 $O%.o:	%.c
 	@echo "    Compiling $< ..."
 	@[ -d $(dir $@) ] || mkdir -p $(dir $@)
-	@${CC} ${CCFLAGS} -MMD -MT "$(<:.c=.s) $@" -o $@ -c $<
+	@${CC} ${CFLAGS} -MMD -MT "$(<:.c=.s) $@" -o $@ -c $<
 
 %.s:	%.c
 	@echo "    Compiling $< to assembly ..."
-	@${CC} ${CCFLAGS} -S -o $@ -c $<
+	@${CC} ${CFLAGS} -S -o $@ -c $<
 
 ################ Installation ##########################################
 
