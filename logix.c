@@ -1,7 +1,7 @@
-#include "pam.h"
+#include "ui.h"
+#include "pw.h"
 #include <pwd.h>
 #include <signal.h>
-#include <unistd.h>
 
 //{{{ Signal handling --------------------------------------------------
 
@@ -33,6 +33,26 @@ static void InstallCleanupHandlers (void)
 #undef S
 
 //}}}-------------------------------------------------------------------
+//{{{ Utility functions
+
+void* xmalloc (size_t n)
+{
+    void* p = calloc (1, n);
+    if (!p) {
+	puts ("Error: out of memory");
+	exit (EXIT_FAILURE);
+    }
+    return (p);
+}
+
+void xfree (void* p)
+{
+    if (p)
+	free (p);
+}
+
+#if 0
+//}}}-------------------------------------------------------------------
 //{{{ Shell
 
 static void LaunchShell (const char* username)
@@ -50,14 +70,22 @@ static void LaunchShell (const char* username)
 }
 
 //}}}-------------------------------------------------------------------
+#endif
 
 int main (void)
 {
     InstallCleanupHandlers();
+    acclist_t al = ReadAccounts();
+    unsigned ali = 0;
+    char password [MAX_PW_LEN];
+    LoginBox (al, &ali, password);
+    printf ("Logging in user '%s', password '%s'\n", al[ali]->name, password);
+#if 0
     PamOpen();
     const char* username = PamLogin();
     LaunchShell (username);
     PamLogout();
     PamClose();
+#endif
     return (0);
 }

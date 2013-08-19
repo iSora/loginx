@@ -14,3 +14,10 @@
 #include <stdio.h>
 #include <limits.h>
 #include <stdbool.h>
+#include <string.h>
+#include <unistd.h>
+
+void* xmalloc (size_t n);
+void xfree (void* p);
+
+#define xfreenull(pp)	do { xfree(pp); pp = NULL; } while(0)

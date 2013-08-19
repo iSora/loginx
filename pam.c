@@ -1,8 +1,6 @@
 #include "pam.h"
 #include <security/pam_appl.h>
 #include <pwd.h>
-#include <unistd.h>
-#include <string.h>
 
 static int xconv (int num_msg, const struct pam_message** msgm, struct pam_response** response, void* appdata_ptr);
 

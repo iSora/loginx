@@ -27,7 +27,7 @@ WARNOPTS	:= -Wall -Wextra -Wpointer-arith -Wredundant-decls \
 CFLAGS		:= ${WARNOPTS} @CUSTOMINCDIR@ -march=native -std=gnu99 \
 		-ffunction-sections -fdata-sections
 LDFLAGS		:= @CUSTOMLIBDIR@
-LIBS		:= -lpam
+LIBS		:= -lpam -lncurses
 ifdef DEBUG
     CFLAGS	+= -O0 -g
 else
