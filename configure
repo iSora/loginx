@@ -3,7 +3,7 @@
 # Project Configuration						     #
 ######################################################################
 
-PKG_NAME="logix"
+PKG_NAME="loginx"
 PKG_VERSTR="v0.1"
 
 MNT_NAME="Mike Sharov"

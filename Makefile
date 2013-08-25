@@ -49,6 +49,7 @@ endif
 
 clean:
 	@[ ! -d ./$O ] || rm -rf ./$O
+	@rm -f ${EXE}
 
 ifdef MAJOR
 DISTVER	:= ${MAJOR}.${MINOR}

@@ -30,7 +30,7 @@ static void PamSetEnvironment (void)
 void PamOpen (void)
 {
     static const struct pam_conv conv = { xconv, NULL };
-    int r = pam_start (LOGIX_NAME, NULL, &conv, &_pamh);
+    int r = pam_start (LOGINX_NAME, NULL, &conv, &_pamh);
     verify(r,"pam_start");
     PamSetEnvironment();
     atexit (PamClose);
