@@ -18,7 +18,28 @@ enum {
     LOGIN_WINDOW_HEIGHT = 4
 };
 
+//----------------------------------------------------------------------
+
 static WINDOW* _loginbox = NULL;
+
+//----------------------------------------------------------------------
+
+static void CursesInit (void);
+static void CursesCleanup (void);
+
+//----------------------------------------------------------------------
+
+static void CursesInit (void)
+{
+    if (!initscr())
+	exit (EXIT_FAILURE);
+    atexit (CursesCleanup);
+    start_color();
+    use_default_colors();
+    init_pair (1, COLOR_GREEN, COLOR_DEFAULT);
+    init_pair (2, COLOR_CYAN, COLOR_DEFAULT);
+    noecho();
+}
 
 static void CursesCleanup (void)
 {
@@ -31,16 +52,10 @@ static void CursesCleanup (void)
 
 void LoginBox (acclist_t al, unsigned* pali, char* password)
 {
-    if (!initscr())
-	exit (EXIT_FAILURE);
-    atexit (CursesCleanup);
-    start_color();
-    use_default_colors();
-    noecho();
+    CursesInit();
+
     if (!(_loginbox = newwin (LOGIN_WINDOW_HEIGHT, LOGIN_WINDOW_WIDTH, (LINES-LOGIN_WINDOW_HEIGHT)/2, (COLS-LOGIN_WINDOW_WIDTH)/2)))
 	exit (EXIT_FAILURE);
-    init_pair (1, COLOR_GREEN, COLOR_DEFAULT);
-    init_pair (2, COLOR_CYAN, COLOR_DEFAULT);
     keypad (_loginbox, true);
     wbkgd (_loginbox, COLOR_PAIR(1)|' ');
 
@@ -49,9 +64,9 @@ void LoginBox (acclist_t al, unsigned* pali, char* password)
     const unsigned aln = NAccounts();
     if (!aln)
 	exit (EXIT_FAILURE);
-    unsigned ali = *pali;
     memset (password, 0, MAX_PW_LEN);
 
+    unsigned ali = *pali;
     do {
 	wattrset (_loginbox, COLOR_PAIR(1));
 	werase (_loginbox);
@@ -69,10 +84,12 @@ void LoginBox (acclist_t al, unsigned* pali, char* password)
 	    password[--pwlen] = 0;
 	else if (key == KEY_UP)
 	    ali = (ali-1) % aln;
-	else if (key == KEY_DOWN)
+	else if (key == KEY_DOWN || key == '\t')
 	    ali = (ali+1) % aln;
     } while (key != '\n');
+    *pali = ali;
+
+    delwin (_loginbox);
 
     CursesCleanup();
-    *pali = ali;
 }

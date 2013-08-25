@@ -1,5 +1,8 @@
 #include "pw.h"
 #include <pwd.h>
+#include <utmp.h>
+#include <fcntl.h>
+#include <sys/stat.h>
 
 static struct account** _accts = NULL;
 static unsigned _naccts = 0;
@@ -50,4 +53,19 @@ acclist_t ReadAccounts (void)
 unsigned NAccounts (void)
 {
     return (_naccts);
+}
+
+void ReadLastlog (void)
+{
+    int fd = open ("/var/log/lastlog", O_RDONLY);
+    if (fd < 0)
+	return;
+    struct stat st;
+    if (fstat (fd, &st) == 0) {
+	const unsigned maxuid = st.st_size / sizeof(struct lastlog);
+	for (unsigned i = 0; i < _naccts; ++i)
+	    if (_accts[i]->uid < maxuid)
+		pread (fd, &_accts[i]->ltime, sizeof(_accts[i]->ltime), _accts[i]->uid * sizeof(struct lastlog));
+    }
+    close (fd);
 }

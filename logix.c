@@ -2,6 +2,7 @@
 #include "pw.h"
 #include <pwd.h>
 #include <signal.h>
+#include <time.h>
 
 //{{{ Signal handling --------------------------------------------------
 
@@ -76,10 +77,10 @@ int main (void)
 {
     InstallCleanupHandlers();
     acclist_t al = ReadAccounts();
-    unsigned ali = 0;
-    char password [MAX_PW_LEN];
+    char password [MAX_PW_LEN] = "password";
+    unsigned ali = 1;
+    ReadLastlog();
     LoginBox (al, &ali, password);
-    printf ("Logging in user '%s', password '%s'\n", al[ali]->name, password);
 #if 0
     PamOpen();
     const char* username = PamLogin();
@@ -87,5 +88,7 @@ int main (void)
     PamLogout();
     PamClose();
 #endif
+    time_t ltime = al[ali]->ltime;
+    printf ("Logging in user '%s', password '%s', lastlog %s", al[ali]->name, password, ctime(&ltime));
     return (0);
 }
