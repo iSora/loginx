@@ -24,3 +24,7 @@ Installation:
 Use it like you would getty. The command is "loginx tty1", and you'd add
 it to inittab, somewhere in rc.d, in a copy of systemd's getty@.service,
 or whatever correct location your distribution's init system requires.
+
+====================================================================
+WARNING: Still working on it. Current version is not yet functional.
+====================================================================
