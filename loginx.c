@@ -1,3 +1,8 @@
+// This file is part of the loginx project
+//
+// Copyright (c) 2013 by Mike Sharov <msharov@users.sourceforge.net>
+// This file is free software, distributed under the MIT License.
+
 #include "ui.h"
 #include "pw.h"
 #include <pwd.h>
@@ -77,7 +82,7 @@ int main (void)
 {
     InstallCleanupHandlers();
     acclist_t al = ReadAccounts();
-    char password [MAX_PW_LEN] = "password";
+    char password [MAX_PW_LEN];
     unsigned ali = 1;
     ReadLastlog();
     LoginBox (al, &ali, password);
