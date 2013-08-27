@@ -55,7 +55,7 @@ static void CursesCleanup (void)
     endwin();
 }
 
-void LoginBox (acclist_t al, unsigned* pali, char* password)
+unsigned LoginBox (acclist_t al, char* password)
 {
     CursesInit();
 
@@ -71,7 +71,12 @@ void LoginBox (acclist_t al, unsigned* pali, char* password)
 	exit (EXIT_FAILURE);
     memset (password, 0, MAX_PW_LEN);
 
-    unsigned ali = *pali;
+    // Make last logged in user default
+    unsigned ali = 0;
+    for (unsigned i = 0; i < aln; ++i)
+	if (al[ali]->ltime <= al[i]->ltime)
+	    ali = i;
+
     do {
 	wattrset (_loginbox, COLOR_PAIR(1));
 	werase (_loginbox);
@@ -92,9 +97,9 @@ void LoginBox (acclist_t al, unsigned* pali, char* password)
 	else if (key == KEY_DOWN || key == '\t')
 	    ali = (ali+1) % aln;
     } while (key != '\n');
-    *pali = ali;
 
     delwin (_loginbox);
-
     CursesCleanup();
+
+    return (ali);
 }

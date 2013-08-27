@@ -9,4 +9,4 @@
 
 enum { MAX_PW_LEN = 64 };
 
-void LoginBox (acclist_t al, unsigned* pali, char* password);
+unsigned LoginBox (acclist_t al, char* password);
